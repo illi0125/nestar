@@ -17,16 +17,28 @@ import { T } from './libs/types/common';
 			playground: true,
 			uploads: false,
 			autoSchemaFile: true,
+			// formatError: (error: T) => {
+			// 	const graphQLFormattedError = {
+			// 		code: error?.extensions.code,
+			// 		message:
+			// 			error?.extensions?.exception?.response?.message ||
+			// 			error?.extensions?.response?.message ||
+			// 			error?.message,
+			// 	};
+			// 	console.log('GRAPHQL GLOBAL ERR:', graphQLFormattedError);
+			// 	return graphQLFormattedError;
+			// },
 			formatError: (error: T) => {
+				const res = error?.extensions?.originalError || error?.extensions?.response;
+				const rawMsg = res?.message || error?.message;
+
 				const graphQLFormattedError = {
-					code: error?.extensions.code,
-					message:
-						error?.extensions?.exception?.response?.message ||
-						error?.extensions?.response?.message ||
-						error?.message,
+					code: error?.extensions?.code || 'BAD_REQUEST',
+					message: Array.isArray(rawMsg) ? rawMsg.join('; ') : rawMsg,
 				};
+
 				console.log('GRAPHQL GLOBAL ERR:', graphQLFormattedError);
-				return graphQLFormattedError; 
+				return graphQLFormattedError;
 			},
 		}),
 		ComponentsModule,

@@ -17,13 +17,15 @@ import { T } from './libs/types/common';
 			playground: true,
 			uploads: false,
 			autoSchemaFile: true,
-			formatError: (error: T) => {
+			formatError: (error: any) => {
 				const res = error?.extensions?.originalError || error?.extensions?.response;
 				const rawMsg = res?.message || error?.message;
 
 				const graphQLFormattedError = {
-					code: error?.extensions?.code || 'BAD_REQUEST',
 					message: Array.isArray(rawMsg) ? rawMsg.join('; ') : rawMsg,
+					extensions: {
+						code: error?.extensions?.code || 'BAD_REQUEST',
+					},
 				};
 
 				console.log('GRAPHQL GLOBAL ERR:', graphQLFormattedError);

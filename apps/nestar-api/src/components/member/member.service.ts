@@ -7,7 +7,7 @@ import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { AuthService } from '../auth/auth.service';
 import { MemberUpdate } from '../../libs/dto/member/member.update';
-import { T } from '../../libs/types/common';
+import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import { ViewService } from '../view/view.service';
 
@@ -59,7 +59,8 @@ export class MemberService {
 			.findOneAndUpdate({ _id: memberId, memberStatus: MemberStatus.ACTIVE }, input, { new: true })
 			.exec();
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
-		result.accessToken = await this.authService.createToken(result);0
+		result.accessToken = await this.authService.createToken(result);
+		0;
 		return result;
 	}
 
@@ -148,5 +149,11 @@ export class MemberService {
 			.exec();
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
 		return result;
+	}
+
+	public async memberStatsEditor(input: StatisticModifier): Promise<Member | null> {
+		console.log('executed');
+		const { _id, targetKey, modifier } = input;
+		return await this.memberModel.findByIdAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true }).exec();
 	}
 }

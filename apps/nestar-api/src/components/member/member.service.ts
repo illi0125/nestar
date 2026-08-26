@@ -59,7 +59,7 @@ export class MemberService {
 			.findOneAndUpdate({ _id: memberId, memberStatus: MemberStatus.ACTIVE }, input, { new: true })
 			.exec();
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
-		result.accessToken = await this.authService.createToken(result);
+		result.accessToken = await this.authService.createToken(result);0
 		return result;
 	}
 
@@ -70,7 +70,7 @@ export class MemberService {
 				$in: [MemberStatus.ACTIVE, MemberStatus.BLOCK],
 			},
 		};
-		const targetMember = await this.memberModel.findOneAndUpdate(search).lean().exec();
+		const targetMember = await this.memberModel.findOne(search).lean().exec();
 		if (!targetMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		if (memberId) {

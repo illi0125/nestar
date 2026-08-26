@@ -74,8 +74,9 @@ export class MemberResolver {
 		console.log('Query: getAgents');
 		return this.memberService.getAgents(memberId, input);
 	}
-
-	/** ADMIN **/
+	// ----------------------------------------
+	// ADMIN
+	// ----------------------------------------
 
 	// Authorization: ADMIN
 	@Roles(MemberType.ADMIN)
@@ -95,8 +96,9 @@ export class MemberResolver {
 		return await this.memberService.updateMemberByAdmin(input);
 	}
 
-
+	// ----------------------------------------
 	// UPLOADER
+	// ----------------------------------------
 	@UseGuards(AuthGuard)
 	@Mutation((returns) => String)
 	public async imageUploader(

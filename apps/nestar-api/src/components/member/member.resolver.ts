@@ -78,7 +78,7 @@ export class MemberResolver {
 		@AuthMember('_id') memberId: ObjectId, //
 	): Promise<Members> {
 		console.log('Query: getAgents');
-		return this.memberService.getAgents(memberId, input);
+		return await this.memberService.getAgents(memberId, input);
 	}
 
 	@UseGuards(AuthGuard)
